@@ -28,6 +28,13 @@
         "destination": "/static/**"
       },
       {
+        "source": "/reader/**",
+        "run": {
+          "serviceId": "experiment-0510",
+          "region": "europe-central2"
+        }
+      },
+      {
         "source": "**",
         "destination": "/index.html",
         "headers": [
