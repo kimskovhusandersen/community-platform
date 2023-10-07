@@ -4,7 +4,10 @@ Aims:
 
 * [X] Deploy to Cloud Run
 * [X] Use firebase rewrites to route traffic
-* [ ] Fetch data from firebase https://docs.astro.build/en/guides/backend/google-firebase/
+* [X] Fetch data from firebase https://docs.astro.build/en/guides/backend/google-firebase/
+  * [ ] Load configuration from CloudRun environment variables. Make sure .env is not deployed
+  * [ ] Upload all image content to firebase storage
+  * [ ] Debug special characters
 * [ ] Use Existing UI components
 
 

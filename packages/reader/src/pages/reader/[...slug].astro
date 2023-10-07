@@ -1,0 +1,41 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import { app } from "../../firebase/server";
+import { marked } from 'marked';
+import { getFirestore } from "firebase-admin/firestore";
+
+interface Page {
+  title: string;
+  content: string;
+}
+
+const { slug } = Astro.params;
+
+if (!slug) {
+  return Astro.redirect("/404");
+}
+
+const parts = slug.split('/');
+const [rootDoc] = parts;
+
+console.log({slug, parts})
+
+const db = getFirestore(app);
+const AcademyRef = db.collection("academy");
+const AcademyPageSnapshot = await AcademyRef.where("slug", "==", slug).get();
+
+if (AcademyPageSnapshot.empty) {
+  return Astro.redirect("/404");
+}
+
+const [pageRaw] = AcademyPageSnapshot.docs;
+const page = pageRaw.data() as Page;
+const mdContent = marked(page.content);
+console.log(`Found page:`, {page})
+---
+
+<div title={page.title}>
+  <h1>{page.title}</h1>
+
+  <article set:html={mdContent}/>
+</div>

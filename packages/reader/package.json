@@ -9,7 +9,9 @@
     "astro": "astro"
   },
   "dependencies": {
+    "@astrojs/markdoc": "^0.5.2",
     "@astrojs/node": "^6.0.3",
-    "astro": "^3.2.3"
+    "astro": "^3.2.3",
+    "firebase-admin": "^11.11.0"
   }
 }

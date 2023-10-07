@@ -1,0 +1,32 @@
+---
+import { app } from "../../firebase/server";
+import { getFirestore } from "firebase-admin/firestore";
+import Layout from "../../layouts/Layout.astro";
+
+interface Page {
+  id: string;
+  titlename: string;
+}
+
+const db = getFirestore(app);
+const friendsRef = db.collection("academy");
+const friendsSnapshot = await friendsRef.get();
+const friends = friendsSnapshot.docs.map((doc) => ({
+  id: doc.id,
+  ...doc.data(),
+})) as Page[];
+
+---
+
+<Layout title="Academy">
+    <h1>Academy</h1>
+    <ul>
+      {
+        friends.map((friend) => (
+          <li>
+            <a href={`/reader/${friend.slug}`}>{friend.title}</a>
+          </li>
+        ))
+      }
+    </ul>
+  </Layout>
