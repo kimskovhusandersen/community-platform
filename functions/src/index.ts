@@ -32,3 +32,5 @@ if (process.env.FUNCTIONS_EMULATOR === 'true') {
 if (process.env.FUNCTIONS_EMULATOR !== 'true') {
   exports.logToCloudLogging = require('./logging/logging')
 }
+
+exports.patreon = require('./patreon/patreon')
