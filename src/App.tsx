@@ -6,8 +6,9 @@ import { GlobalStyles } from 'oa-components'
 import { RootStore } from './stores'
 import ErrorBoundary from './common/Error/ErrorBoundary'
 import { Routes } from './pages'
+import { DatabaseV2 } from './stores/databaseV2'
 
-const rootStore = new RootStore()
+const rootStore = new RootStore(new DatabaseV2())
 
 /**
  * Additional store and db exports for use in modern context consumers

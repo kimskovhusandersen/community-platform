@@ -1,6 +1,6 @@
 import { AggregationsStore } from './Aggregations/aggregations.store'
 import { CategoriesStore } from './Categories/categories.store'
-import { DatabaseV2 } from './databaseV2'
+import type { DatabaseV2 } from './databaseV2'
 import { HowtoStore } from './Howto/howto.store'
 import { MapsStore } from './Maps/maps.store'
 import { MobileMenuStore } from './MobileMenu/mobilemenu.store'
@@ -13,8 +13,13 @@ import { QuestionStore } from './Question/question.store'
 import { UserStore } from './User/user.store'
 
 export class RootStore {
-  dbV2 = new DatabaseV2()
-  stores = stores(this)
+  public dbV2: DatabaseV2
+  public stores: IStores
+
+  constructor(db) {
+    this.dbV2 = db
+    this.stores = stores(this)
+  }
 }
 
 // the following stores are passed into a top level app provider and can be accessed through @inject
@@ -24,23 +29,20 @@ export class RootStore {
 // NOTE - As all stores are injected at the same time it is best to avoid using many constructor methods
 // as these will be called immediately, and instead use init() or similar methods that can be called
 // from a page (see common/module store for example)
-const stores = (rootStore: RootStore) => {
-  const stores: IStores = {
-    aggregationsStore: new AggregationsStore(rootStore),
-    howtoStore: new HowtoStore(rootStore),
-    userStore: new UserStore(rootStore),
-    tagsStore: new TagsStore(rootStore),
-    categoriesStore: new CategoriesStore(rootStore),
-    researchCategoriesStore: new ResearchCategoriesStore(rootStore),
-    platformStore: new PlatformStore(rootStore),
-    mobileMenuStore: new MobileMenuStore(rootStore),
-    mapsStore: new MapsStore(rootStore),
-    themeStore: new ThemeStore(),
-    userNotificationsStore: new UserNotificationsStore(rootStore),
-    questionStore: new QuestionStore(rootStore),
-  }
-  return stores
-}
+const stores = (rootStore: RootStore): IStores => ({
+  aggregationsStore: new AggregationsStore(rootStore),
+  howtoStore: new HowtoStore(rootStore),
+  userStore: new UserStore(rootStore),
+  tagsStore: new TagsStore(rootStore),
+  categoriesStore: new CategoriesStore(rootStore),
+  researchCategoriesStore: new ResearchCategoriesStore(rootStore),
+  platformStore: new PlatformStore(rootStore),
+  mobileMenuStore: new MobileMenuStore(rootStore),
+  mapsStore: new MapsStore(rootStore),
+  themeStore: new ThemeStore(),
+  userNotificationsStore: new UserNotificationsStore(rootStore),
+  questionStore: new QuestionStore(rootStore),
+})
 
 export interface IStores {
   howtoStore: HowtoStore
