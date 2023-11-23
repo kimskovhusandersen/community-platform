@@ -5,6 +5,7 @@ import {
   Default,
   NoThumbnails,
   ShowNextPrevButtons,
+  SingleImage,
 } from './ImageGallery.stories'
 import { ImageGallery } from './ImageGallery'
 import type { ImageGalleryProps } from './ImageGallery'
@@ -159,6 +160,16 @@ describe('ImageGallery', () => {
     expect(image?.getAttribute('src')).toEqual(
       thumbnails[0].firstElementChild?.getAttribute('src'),
     )
+  })
+
+  it('does not show thumbnail if only single image is present', async () => {
+    const { getAllByTestId } = render(
+      <SingleImage {...(SingleImage.args as ImageGalleryProps)} />,
+    )
+
+    expect(() => {
+      getAllByTestId('thumbnail')
+    }).toThrow()
   })
 
   it('supports no thumbnail option', async () => {

@@ -44,6 +44,12 @@ export const Default: StoryFn<typeof ImageGallery> = (
   return <ImageGallery images={testImages} {...props} />
 }
 
+export const SingleImage: StoryFn<typeof ImageGallery> = (
+  props: Omit<ImageGalleryProps, 'images'>,
+) => {
+  return <ImageGallery images={testImages.slice(0, 1)} {...props} />
+}
+
 export const NoThumbnails: StoryFn<typeof ImageGallery> = (
   props: Omit<ImageGalleryProps, 'images'>,
 ) => {
