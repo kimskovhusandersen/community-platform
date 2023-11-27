@@ -106,7 +106,7 @@ export class HowtoList extends React.Component<any, IState> {
 
     return (
       <Box>
-        <Flex sx={{ paddingTop: [10, 26], paddingBottom: [10, 26] }}>
+        <Flex sx={{ paddingTop: [5, 18], paddingBottom: [5, 18] }}>
           {referrerSource ? (
             <Box sx={{ width: '100%' }}>
               <Heading
@@ -135,12 +135,28 @@ export class HowtoList extends React.Component<any, IState> {
             <Heading
               sx={{
                 marginX: 'auto',
-                textAlign: 'center',
                 fontWeight: 'bold',
-                fontSize: 5,
+                fontSize: '4vw',
+                marginY: 0,
+                py: 0
               }}
             >
-              {theme && theme.howtoHeading}
+              The largest open source library of recycling solutions with{' '}
+              <mark>{howtoItems.length}</mark> How-to guides from{' '}
+              <mark>
+                {
+                  howtoItems.reduce((authors, howtoItem) => {
+                    if (
+                      howtoItem._createdBy &&
+                      authors.indexOf(howtoItem._createdBy) === -1
+                    ) {
+                      authors.push(howtoItem._createdBy)
+                    }
+                    return authors
+                  }, [] as string[]).length
+                }
+              </mark>{' '}
+              micro recyclers.
             </Heading>
           )}
         </Flex>
