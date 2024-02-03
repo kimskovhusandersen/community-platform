@@ -369,6 +369,25 @@ jobs:
       - run:
           command: npx semantic-release@22
 
+  earthly:
+    machine:
+      image: ubuntu-2204:2023.07.2
+    steps:
+      - checkout
+      - run:
+          name: Install QEMU support
+          command: "docker run --rm --privileged tonistiigi/binfmt:latest --install linux/amd64,linux/arm64,linux/arm/v7"
+      - run:
+          name: Install released earthly
+          command: |
+            sudo wget https://github.com/earthly/earthly/releases/latest/download/earthly-linux-amd64 -O /usr/local/bin/earthly
+            sudo chmod +x /usr/local/bin/earthly
+      - run:
+          name: Run lint
+          command: |-
+              earthly --ci -P \
+              +lint
+
 ######################################################################################################
 #  Workflows - Collections of jobs to define overall processes
 ######################################################################################################
@@ -377,6 +396,8 @@ workflows:
   main_workflow:
     # by default jobs will run concurrently, so specify requires if want to run sequentially
     jobs:
+      - earthly:
+          name: Earthly
       - spellcheck:
           name: Check documentation spelling
           filters:
