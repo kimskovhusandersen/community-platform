@@ -370,18 +370,11 @@ jobs:
           command: npx semantic-release@22
 
   earthly:
-    machine:
-      image: ubuntu-2204:2023.07.2
+    docker: 
+      - image: earthly/earthly
     steps:
       - checkout
-      - run:
-          name: Install QEMU support
-          command: "docker run --rm --privileged tonistiigi/binfmt:latest --install linux/amd64,linux/arm64,linux/arm/v7"
-      - run:
-          name: Install released earthly
-          command: |
-            sudo wget https://github.com/earthly/earthly/releases/latest/download/earthly-linux-amd64 -O /usr/local/bin/earthly
-            sudo chmod +x /usr/local/bin/earthly
+      - setup_remote_docker
       - run:
           name: Run lint
           command: |-
