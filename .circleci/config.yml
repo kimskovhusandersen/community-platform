@@ -378,7 +378,7 @@ jobs:
       - run:
           name: Run lint
           command: |-
-              earthly --ci -P \
+              earthly --org earthly-4280 --sat my-satellite --ci --push \
               +lint
 
 ######################################################################################################
