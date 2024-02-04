@@ -51,6 +51,8 @@ Or join our [Discord channel](https://discord.gg/gJ7Yyk4)
 Thanks go to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
 
 <!--- spell-checker: disable --->
+<!-- vale off -->
+
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
 <!-- prettier-ignore-start -->
 <!-- markdownlint-disable -->
@@ -149,6 +151,7 @@ Thanks go to these wonderful people ([emoji key](https://allcontributors.org/doc
 <!-- prettier-ignore-end -->
 
 <!-- ALL-CONTRIBUTORS-LIST:END -->
+<!-- vale on -->
 <!--- spell-checker: enable --->
 
 This project adopted the [all-contributors](https://allcontributors.org) specification in June 2022.

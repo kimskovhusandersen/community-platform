@@ -1,0 +1,7 @@
+extends: spelling
+message: "Did you really mean '%s'?"
+level: error
+code: false
+ignore:
+  - Spelling/wordlist.txt
+  

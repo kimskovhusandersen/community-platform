@@ -17,6 +17,7 @@ orbs:
   browser-tools: circleci/browser-tools@1.4.5
   # used to track coverage
   codecov: codecov/codecov@3.2.5
+  vale: circleci/vale@1.1.1
 
 ######################################################################################################
 #  Aliases - code snippets that can be included inline in any other markup
@@ -147,17 +148,6 @@ examples:
 #  Jobs - Independently specified lists of tasks and environments for execution
 ######################################################################################################
 jobs:
-  spellcheck:
-    docker: *docker
-    resource_class: small
-    steps:
-      - checkout
-      - attach_workspace:
-          at: '.'
-      - run:
-          name: Check spelling on documentation
-          command: |
-            npx cspell "**/*.md" --config ./.cspell.json
   lint-commits:
     docker:
       - image: commitlint/commitlint
@@ -377,8 +367,10 @@ workflows:
   main_workflow:
     # by default jobs will run concurrently, so specify requires if want to run sequentially
     jobs:
-      - spellcheck:
+      - vale/lint:
           name: Check documentation spelling
+          reference_branch: master
+          strategy: all
           filters:
             branches:
               ignore:
