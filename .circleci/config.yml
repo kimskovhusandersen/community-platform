@@ -394,6 +394,19 @@ jobs:
               earthly --org earthly-4280 --sat my-satellite --ci --push \
               +build
 
+  earthly3:
+    docker: 
+      - image: earthly/earthly
+    resource_class: small
+    steps:
+      - checkout
+      - setup_remote_docker
+      - run:
+          name: Run build
+          command: |-
+              earthly --org earthly-4280 --sat my-satellite --ci --push \
+              +testUnit
+
 ######################################################################################################
 #  Workflows - Collections of jobs to define overall processes
 ######################################################################################################
@@ -406,6 +419,8 @@ workflows:
           name: Earthly
       - earthly2:
           name: Earthly Build
+      - earthly3:
+          name: Earthly Test
       - spellcheck:
           name: Check documentation spelling
           filters:

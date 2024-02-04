@@ -19,6 +19,9 @@ setupProject:
     COPY src ./src
     COPY .eslintignore .
     COPY .eslintrc.json .
+    COPY .env-cmdrc.js .
+    COPY tsconfig.json .
+    COPY craco.config.ts .
 
 lint:
     FROM +setupProject
@@ -29,11 +32,13 @@ lint:
     RUN yarn lint
     RUN yarn workspace oa-components lint
 
+testUnit:
+    FROM +setupProject
+    RUN yarn run test:unit
+    RUN yarn run test:components
+
 build:
     FROM +setupProject
-    COPY tsconfig.json .
-    COPY .env-cmdrc.js .
-    COPY craco.config.ts .
     ENV REACT_APP_BRANCH='branch'
     ENV REACT_APP_PROJECT_VERSION='0.0.0'
     COPY public ./public
