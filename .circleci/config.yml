@@ -372,6 +372,7 @@ jobs:
   earthly:
     docker: 
       - image: earthly/earthly
+    resource_class: small
     steps:
       - checkout
       - setup_remote_docker
@@ -383,6 +384,7 @@ jobs:
   earthly2:
     docker: 
       - image: earthly/earthly
+    resource_class: small
     steps:
       - checkout
       - setup_remote_docker
