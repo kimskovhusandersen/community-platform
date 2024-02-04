@@ -380,6 +380,17 @@ jobs:
           command: |-
               earthly --org earthly-4280 --sat my-satellite --ci --push \
               +lint
+  earthly2:
+    docker: 
+      - image: earthly/earthly
+    steps:
+      - checkout
+      - setup_remote_docker
+      - run:
+          name: Run build
+          command: |-
+              earthly --org earthly-4280 --sat my-satellite --ci --push \
+              +build
 
 ######################################################################################################
 #  Workflows - Collections of jobs to define overall processes
@@ -391,6 +402,8 @@ workflows:
     jobs:
       - earthly:
           name: Earthly
+      - earthly2:
+          name: Earthly Build
       - spellcheck:
           name: Check documentation spelling
           filters:
