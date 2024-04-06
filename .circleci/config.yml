@@ -64,6 +64,7 @@ aliases:
     save_cache:
       # https://circleci.com/docs/caching/#basic-example-of-yarn-package-manager-caching
       # NOTE - ensure always caches to consistent location when using non-circleci user
+      name: Save yarn cache
       paths:
         - /home/circleci/.yarn/cache
         - /home/circleci/.yarn/install-state.gz
@@ -105,6 +106,8 @@ commands:
       - checkout
       - *restore_yarn_cache
       - *install_packages
+      - *save_yarn_cache
+
   inject_instance_configuration:
     steps:
       - run:
@@ -272,7 +275,7 @@ jobs:
   test_circular_dependency:
     docker: *docker
     steps:
-      - setup_repo
+      - checkout
       - run:
           command: yarn run test:madge
 
@@ -282,6 +285,7 @@ jobs:
       GENERATE_SOURCEMAP: 'false'
       SKIP_PREFLIGHT_CHECK: 'true'
       NODE_OPTIONS: '--max-old-space-size=5632'
+      CYPRESS_INSTALL_BINARY: 0
     # If experiencing out-of-memory issues can increase resource_class below and max space size above
     # https://circleci.com/docs/2.0/configuration-reference/#resourceclass
     resource_class: large
