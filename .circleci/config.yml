@@ -276,7 +276,7 @@ jobs:
           command: yarn run test:madge
 
   build:
-    executor: node-with-browsers
+    executor: node
     environment:
       GENERATE_SOURCEMAP: 'false'
       SKIP_PREFLIGHT_CHECK: 'true'
