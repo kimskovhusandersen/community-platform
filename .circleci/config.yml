@@ -135,10 +135,12 @@ commands:
           steps:
             - run:
                 name: Install Cypress
+                environment:
+                  CYPRESS_CACHE_FOLDER: /home/circleci/project/.cache/Cypress
                 command: |
                   unset CYPRESS_INSTALL_BINARY
-                  npx cypress install
-                  which cypress
+                  yarn add cypress@$(cat package.json | jq -r ".dependencies.cypress")
+                working_directory: packages/cypress
             - save_cache:
                 name: Save cypress cache
                 key: cypress-{{ checksum "yarn.lock" }}
@@ -147,6 +149,7 @@ commands:
             - persist_to_workspace:
                 root: .
                 paths:
+                  - ./packages/cypress/node_modules
                   - ./.cache/Cypress
   
   inject_instance_configuration:
