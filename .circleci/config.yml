@@ -194,7 +194,8 @@ jobs:
           paths:
             - node_modules
   test_security_rules:
-    executor: node
+    # Use node-with-browsers to ensure java is available
+    executor: node-with-browsers
     resource_class: medium+
     environment:
       GCLOUD_PROJECT: onearmy-test-ci
