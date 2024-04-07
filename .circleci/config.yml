@@ -59,7 +59,6 @@ aliases:
       name: Install Packages
       # Install packages
       command: |
-        echo $CYPRESS_INSTALL_BINARY
         yarn install --immutable --mode=skip-build
       environment:
         CYPRESS_INSTALL_BINARY: 0
@@ -114,16 +113,15 @@ commands:
     description: checkout repo and install packages
     # no parameters currently used, but could be specified here to use within steps
     parameters:
-      include_cypress:
-        type: enum
-        enum: ["0", "1"]
-        default: "0"
+      include_cypress_binary:
+        type: boolean
+        default: false
     steps:
       - checkout
       - *restore_yarn_cache
       - when: 
           condition:
-            equal: [<< parameters.include_cypress >>, "1"]
+            equal: [<< parameters.include_cypress_binary >>, true]
           steps:
             - restore_cache:
                 name: Restore cypress cache
@@ -133,7 +131,7 @@ commands:
       - *save_yarn_cache
       - when: 
           condition:
-            equal: [<< parameters.include_cypress >>, "1"]
+            equal: [<< parameters.include_cypress_binary >>, true]
           steps:
             - run:
                 name: Install Cypress
@@ -387,7 +385,7 @@ jobs:
     resource_class: medium+
     steps:
       - setup_repo:
-          include_cypress: '1'
+          include_cypress_binary: true
 
   # Run cypress e2e tests on chrome
   test_e2e:
