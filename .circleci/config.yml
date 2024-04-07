@@ -455,7 +455,7 @@ workflows:
               ignore:
                 - production
       - setup:
-          name: Setup
+          name: Setup dependencies
           requires:
             - 'Check documentation spelling'
             - 'Lint commits'
@@ -466,7 +466,7 @@ workflows:
       - lint:
           name: Lint code
           requires:
-            - 'Setup'
+            - 'Setup dependencies'
           filters:
             branches:
               ignore:
@@ -475,13 +475,13 @@ workflows:
       # Note - when calling test we also let the test script handle building as it injects random variables for seeding the DB
       - build:
           requires:
-            - 'Setup'
+            - 'Setup dependencies'
           name: Build Application
           context: build-context
       - test_unit:
           name: 'Unit tests'
           requires:
-            - 'Setup'
+            - 'Setup dependencies'
           filters:
             branches:
               ignore:
@@ -489,7 +489,7 @@ workflows:
       - test_circular_dependency:
           name: 'Circular dependency test'
           requires:
-            - 'Setup'
+            - 'Setup dependencies'
           filters:
             branches:
               ignore:
@@ -497,7 +497,7 @@ workflows:
       - storybook:
           name: Build Storybook
           requires:
-            - 'Setup'
+            - 'Setup dependencies'
           filters:
             branches:
               ignore:
@@ -505,7 +505,7 @@ workflows:
       - test_security_rules:
           name: Test Security Rules
           requires:
-            - 'Setup'
+            - 'Setup dependencies'
           filters:
             branches:
               ignore:
@@ -513,7 +513,7 @@ workflows:
       - test_functions:
           name: 'Cloud Function tests'
           requires:
-            - 'Setup'
+            - 'Setup dependencies'
           context: build-context
           filters:
             branches:
