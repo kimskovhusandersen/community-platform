@@ -455,7 +455,7 @@ workflows:
               ignore:
                 - production
       - setup:
-          name: Setup dependenciesw
+          name: Setup dependencies
           requires:
             - 'Check documentation spelling'
             - 'Lint commits'
