@@ -281,6 +281,7 @@ jobs:
     docker: *docker
     steps:
       - checkout
+      - *restore_yarn_cache
       - run:
           command: yarn run test:madge
 
