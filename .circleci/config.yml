@@ -145,11 +145,11 @@ commands:
                 name: Save cypress cache
                 key: cypress-{{ checksum "yarn.lock" }}
                 paths:
-                  - ~/.cache/Cypress
+                  - ./.cache/Cypress
             - persist_to_workspace:
                 root: .
                 paths:
-                  - ~/.cache/Cypress
+                  - ./.cache/Cypress
   
   inject_instance_configuration:
     steps:
