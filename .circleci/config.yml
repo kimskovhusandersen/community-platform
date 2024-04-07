@@ -140,9 +140,14 @@ commands:
                 command: |
                   unset CYPRESS_INSTALL_BINARY
                   yarn dlx cypress install
+                  which cypress
             - save_cache:
                 name: Save cypress cache
                 key: cypress-{{ checksum "yarn.lock" }}
+                paths:
+                  - ~/.cache/Cypress
+            - persist_to_workspace:
+                root: .
                 paths:
                   - ~/.cache/Cypress
   
