@@ -52,8 +52,8 @@ aliases:
         # https://circleci.com/docs/2.0/caching/
         # https://circleci.com/docs/2.0/yarn/
         # NOTE - if changing base image or received cache permission denied may need to bump version v3->v4 or similar (clears after 15d)
-        - v11-yarn-{{ checksum "yarn.lock" }}
-        - v11-yarn
+        - v12-yarn-{{ checksum "yarn.lock" }}
+        - v12-yarn
   - &install_packages
     run:
       name: Install Packages
@@ -72,7 +72,15 @@ aliases:
       paths:
         - /home/circleci/.yarn/cache
         - /home/circleci/.yarn/install-state.gz
-      key: v11-yarn-{{ checksum "yarn.lock" }}
+        - /home/circleci/node_modules
+        - /home/circleci/functions/node_modules
+        - /home/circleci/packages/components/node_modules
+        - /home/circleci/packages/cypress/node_modules
+        - /home/circleci/packages/documentation/node_modules
+        - /home/circleci/packages/emulators-docker/node_modules
+        - /home/circleci/packages/security-rules/node_modules
+        - /home/circleci/packages/themes/node_modules
+      key: v12-yarn-{{ checksum "yarn.lock" }}
 
   # Example debugging commands for use troubleshooting caching (du will exit with status 141)
   - &check_folders
