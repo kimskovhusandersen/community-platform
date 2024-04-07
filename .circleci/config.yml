@@ -224,15 +224,12 @@ jobs:
     executor: node
     resource_class: medium+
     steps:
-      - setup_repo
+      - attach_workspace:
+          at: '.'
       - run:
           command: yarn lint
       - run:
           command: yarn workspace oa-components lint
-      - persist_to_workspace:
-          root: .
-          paths:
-            - node_modules
   test_security_rules:
     # Use node-with-browsers to ensure java is available
     executor: node-with-browsers
