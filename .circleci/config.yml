@@ -114,7 +114,8 @@ commands:
       - checkout
       - *restore_yarn_cache
       - when: 
-          condition: << parameters.include_cypress >>
+          condition:
+            equal: [<< parameters.include_cypress >>, "1"]
           steps:
             - restore_cache:
                 name: Restore cypress cache
@@ -123,7 +124,8 @@ commands:
       - *install_packages
       - *save_yarn_cache
       - when: 
-          condition: << parameters.include_cypress >>
+          condition:
+            equal: [<< parameters.include_cypress >>, "1"]
           steps:
             - save_cache:
                 name: Save cypress cache
@@ -204,7 +206,8 @@ jobs:
       - persist_to_workspace:
           root: .
           paths:
-            - node_modules
+            - '*'
+
   lint:
     executor: node
     resource_class: medium+
