@@ -182,6 +182,10 @@ jobs:
           command: yarn lint
       - run:
           command: yarn workspace oa-components lint
+      - persist_to_workspace:
+          root: .
+          paths:
+            - "node_modules"
   # Prepare node module caches so that future tasks run more quickly
   # NOTE - not currently used as we only have one workflow
   setup:
