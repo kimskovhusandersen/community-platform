@@ -19,14 +19,20 @@ orbs:
   codecov: codecov/codecov@3.2.5
 
 ######################################################################################################
+#  Executors - define the environment in which a job runs
+######################################################################################################
+executors:
+  node:
+    docker:
+      - image: cimg/node:20.7.0
+  node-with-browsers:
+    docker:
+      - image: cimg/node:20.7.0-browsers
+
+######################################################################################################
 #  Aliases - code snippets that can be included inline in any other markup
 ######################################################################################################
 aliases:
-  # use a base image running node v18 with chrome/firefox browsers preinstalled
-  # This can be applied to any job via `docker: *docker` syntax
-  - &docker
-    - image: cimg/node:20.7.0-browsers
-
   # Use base image with support for node version parameter and matrix
   # This can be applied to any job via `<<: *docker_matrix` syntax
   - docker_matrix: &docker_matrix
@@ -149,7 +155,7 @@ examples:
 ######################################################################################################
 jobs:
   spellcheck:
-    docker: *docker
+    executor: node
     resource_class: small
     steps:
       - checkout
@@ -172,7 +178,7 @@ jobs:
           command: |
             commitlint --from=$(git merge-base remotes/origin/${CIRCLE_BRANCH} master) --verbose
   lint:
-    docker: *docker
+    executor: node
     resource_class: medium+
     steps:
       - setup_repo
@@ -180,14 +186,8 @@ jobs:
           command: yarn lint
       - run:
           command: yarn workspace oa-components lint
-  # Prepare node module caches so that future tasks run more quickly
-  # NOTE - not currently used as we only have one workflow
-  setup:
-    docker: *docker
-    steps:
-      - setup_repo
   test_security_rules:
-    docker: *docker
+    executor: node
     resource_class: medium+
     environment:
       GCLOUD_PROJECT: onearmy-test-ci
@@ -236,7 +236,7 @@ jobs:
           path: functions/reports
 
   test_functions_upload_coverage:
-    docker: *docker
+    executor: node
     resource_class: medium+
     steps:
       - setup_repo
@@ -247,7 +247,7 @@ jobs:
   # Create a production build
   # NOTE - not currently used in test workflow as different build_env required for each machine
   test_unit:
-    docker: *docker
+    executor: node
     resource_class: medium+
     steps:
       - setup_repo
@@ -271,14 +271,14 @@ jobs:
           path: reports
 
   test_circular_dependency:
-    docker: *docker
+    executor: node
     steps:
       - setup_repo
       - run:
           command: yarn run test:madge
 
   build:
-    <<: *docker_matrix
+    executor: node-with-browsers
     environment:
       GENERATE_SOURCEMAP: 'false'
       SKIP_PREFLIGHT_CHECK: 'true'
@@ -307,7 +307,7 @@ jobs:
           paths:
             - build
   storybook:
-    docker: *docker
+    executor: node
     resource_class: medium
     steps:
       - setup_repo
@@ -316,7 +316,7 @@ jobs:
       - run:
           command: yarn storybook:build
   deploy:
-    docker: *docker
+    executor: node
     resource_class: medium+
     parameters:
       # optional environment variables to set during build process
@@ -334,7 +334,7 @@ jobs:
 
   # Run cypress e2e tests on chrome
   test_e2e:
-    docker: *docker
+    executor: node-with-browsers
     resource_class: medium+
     # build matrix will run 4 parallel builds handled by cypress, so don't need to specify more here
     parallelism: 1
@@ -370,7 +370,7 @@ jobs:
       - store_artifacts:
           path: ./packages/cypress/src/screenshots/
   release:
-    docker: *docker
+    executor: node
     resource_class: medium+
     steps:
       - setup_repo
