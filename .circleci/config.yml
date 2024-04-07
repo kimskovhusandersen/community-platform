@@ -318,7 +318,8 @@ jobs:
   test_circular_dependency:
     executor: node
     steps:
-      - setup_repo
+      - attach_workspace:
+          at: '.'
       - run:
           command: yarn run test:madge
 
