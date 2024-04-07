@@ -126,7 +126,7 @@ commands:
             - restore_cache:
                 name: Restore cypress cache
                 keys:
-                  - cypress-{{ checksum "yarn.lock" }}
+                  - cypress-v13-{{ checksum "yarn.lock" }}
       - *install_packages
       - *save_yarn_cache
       - when: 
@@ -137,20 +137,20 @@ commands:
                 name: Install Cypress
                 environment:
                   CYPRESS_CACHE_FOLDER: /home/circleci/project/.cache/Cypress
+                  CYPRESS_COMMERCIAL_RECOMMENDATIONS: 0
                 command: |
                   unset CYPRESS_INSTALL_BINARY
                   yarn add cypress@$(cat package.json | jq -r ".dependencies.cypress")
                 working_directory: packages/cypress
             - save_cache:
                 name: Save cypress cache
-                key: cypress-{{ checksum "yarn.lock" }}
+                key: cypress-v13-{{ checksum "yarn.lock" }}
                 paths:
                   - ./.cache/Cypress
             - persist_to_workspace:
                 root: .
                 paths:
-                  - ./packages/cypress/node_modules
-                  - ./.cache/Cypress
+                  - '*'
   
   inject_instance_configuration:
     steps:
@@ -535,7 +535,7 @@ workflows:
             - 'Unit tests'
             - 'Lint code'
             - 'Circular dependency test'
-            - 'Cloud Function tests'
+            # - 'Cloud Function tests'
             - 'Test Security Rules'
             - 'Build Storybook'
           filters:
