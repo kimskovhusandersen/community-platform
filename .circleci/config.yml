@@ -61,7 +61,7 @@ aliases:
       command: |
         yarn install --immutable --mode=skip-build
       environment:
-        CYPRESS_INSTALL_BINARY: 0
+        CYPRESS_INSTALL_BINARY: << parameters.include_cypress >>
         YARN_INSTALL_STATE_PATH: /home/circleci/.yarn/install-state.gz
         YARN_CACHE_FOLDER: /home/circleci/.yarn/cache
   - &save_yarn_cache
@@ -104,12 +104,17 @@ commands:
   setup_repo:
     description: checkout repo and install packages
     # no parameters currently used, but could be specified here to use within steps
-    # parameters:
+    parameters:
+      include_cypress:
+        type: enum
+        enum: ["0", "1"]
+        default: "0"
     steps:
       - checkout
       - *restore_yarn_cache
       - *install_packages
       - *save_yarn_cache
+  
   inject_instance_configuration:
     steps:
       - run:
@@ -184,10 +189,10 @@ jobs:
           command: yarn lint
       - run:
           command: yarn workspace oa-components lint
-    persist_to_workspace:
-      root: .
-      paths:
-        - node_modules
+      - persist_to_workspace:
+          root: .
+          paths:
+            - node_modules
   test_security_rules:
     executor: node
     resource_class: medium+
@@ -346,7 +351,8 @@ jobs:
       CI_BROWSER:
         type: string
     steps:
-      - setup_repo
+      - setup_repo:
+          include_cypress: '1'
       # retrieve build folder
       - attach_workspace:
           at: '.'
