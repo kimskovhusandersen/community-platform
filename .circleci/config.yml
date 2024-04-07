@@ -184,6 +184,10 @@ jobs:
           command: yarn lint
       - run:
           command: yarn workspace oa-components lint
+    persist_to_workspace:
+      root: .
+      paths:
+        - node_modules
   test_security_rules:
     executor: node
     resource_class: medium+
