@@ -196,6 +196,15 @@ jobs:
           name: Linting commits
           command: |
             commitlint --from=$(git merge-base remotes/origin/${CIRCLE_BRANCH} master) --verbose
+  setup:
+    executor: node
+    resource_class: medium+
+    steps:
+      - setup_repo
+      - persist_to_workspace:
+          root: .
+          paths:
+            - node_modules
   lint:
     executor: node
     resource_class: medium+
@@ -424,11 +433,19 @@ workflows:
             branches:
               ignore:
                 - production
-      - lint:
-          name: Lint code
+      - setup:
+          name: Setup
           requires:
             - 'Check documentation spelling'
             - 'Lint commits'
+          filters:
+            branches:
+              ignore:
+                - production
+      - lint:
+          name: Lint code
+          requires:
+            - 'Setup'
           filters:
             branches:
               ignore:
