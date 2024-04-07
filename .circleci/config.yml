@@ -53,12 +53,13 @@ aliases:
         # https://circleci.com/docs/2.0/yarn/
         # NOTE - if changing base image or received cache permission denied may need to bump version v3->v4 or similar (clears after 15d)
         - v11-yarn-{{ checksum "yarn.lock" }}
-        - v11-yarn-
+        - v11-yarn
   - &install_packages
     run:
       name: Install Packages
       # Install packages
       command: |
+        echo $CYPRESS_INSTALL_BINARY
         yarn install --immutable --mode=skip-build
       environment:
         CYPRESS_INSTALL_BINARY: << parameters.include_cypress >>
@@ -112,8 +113,23 @@ commands:
     steps:
       - checkout
       - *restore_yarn_cache
+      - when: 
+          condition: << parameters.include_cypress >>
+          steps:
+            - restore_cache:
+                name: Restore cypress cache
+                keys:
+                  - cypress-{{ checksum "yarn.lock" }}
       - *install_packages
       - *save_yarn_cache
+      - when: 
+          condition: << parameters.include_cypress >>
+          steps:
+            - save_cache:
+                name: Save cypress cache
+                key: cypress-{{ checksum "yarn.lock" }}
+                paths:
+                  - ~/.cache/Cypress
   
   inject_instance_configuration:
     steps:
