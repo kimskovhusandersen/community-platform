@@ -237,7 +237,6 @@ jobs:
     environment:
       GCLOUD_PROJECT: onearmy-test-ci
     steps:
-      - setup_repo
       - attach_workspace:
           at: '.'
       - run:
@@ -295,7 +294,8 @@ jobs:
     executor: node
     resource_class: medium+
     steps:
-      - setup_repo
+      - attach_workspace:
+          at: '.'
       - run:
           # NOTE - run-in-band to try reduce memory leaks (https://github.com/facebook/jest/issues/7874)
           command: yarn run test:unit && yarn run test:components
@@ -356,7 +356,6 @@ jobs:
     executor: node
     resource_class: medium
     steps:
-      - setup_repo
       - attach_workspace:
           at: '.'
       - run:
