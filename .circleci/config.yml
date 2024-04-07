@@ -466,13 +466,13 @@ workflows:
       # Note - when calling test we also let the test script handle building as it injects random variables for seeding the DB
       - build:
           requires:
-            - 'Lint code'
+            - 'Setup'
           name: Build Application
           context: build-context
       - test_unit:
           name: 'Unit tests'
           requires:
-            - 'Lint code'
+            - 'Setup'
           filters:
             branches:
               ignore:
@@ -480,7 +480,7 @@ workflows:
       - test_circular_dependency:
           name: 'Circular dependency test'
           requires:
-            - 'Lint code'
+            - 'Setup'
           filters:
             branches:
               ignore:
@@ -488,7 +488,7 @@ workflows:
       - storybook:
           name: Build Storybook
           requires:
-            - 'Lint code'
+            - 'Setup'
           filters:
             branches:
               ignore:
@@ -496,7 +496,7 @@ workflows:
       - test_security_rules:
           name: Test Security Rules
           requires:
-            - 'Lint code'
+            - 'Setup'
           filters:
             branches:
               ignore:
@@ -504,7 +504,7 @@ workflows:
       - test_functions:
           name: 'Cloud Function tests'
           requires:
-            - 'Lint code'
+            - 'Setup'
           context: build-context
           filters:
             branches:
