@@ -138,7 +138,7 @@ commands:
             - run:
                 name: Install Cypress
                 command: |
-                  cypress install
+                  yarn dlx cypress install
             - save_cache:
                 name: Save cypress cache
                 key: cypress-{{ checksum "yarn.lock" }}
@@ -377,6 +377,13 @@ jobs:
           # token: $FIREBASE_DEPLOY_TOKEN # This should be set as environment variable
           alias: << parameters.DEPLOY_ALIAS >>
 
+  setup_e2e:
+    executor: node
+    resource_class: medium+
+    steps:
+      - setup_repo:
+          include_cypress: '1'
+
   # Run cypress e2e tests on chrome
   test_e2e:
     executor: node-with-browsers
@@ -389,9 +396,6 @@ jobs:
       CI_BROWSER:
         type: string
     steps:
-      - setup_repo:
-          include_cypress: '1'
-      # retrieve build folder
       - attach_workspace:
           at: '.'
       - inject_instance_configuration
@@ -518,15 +522,23 @@ workflows:
             branches:
               ignore:
                 - production
+      - setup_e2e:
+          name: Setup e2e
+          # requires:
+          #   - 'Build Application'
+          #   - 'Unit tests'
+          #   - 'Circular dependency test'
+          #   - 'Cloud Function tests'
+          #   - 'Build Storybook'
+          #   - 'Test Security Rules'
+          filters:
+            branches:
+              ignore:
+                - production
       - test_e2e:
           name: e2e-<< matrix.CI_BROWSER >>-<< matrix.CI_NODE >>
           requires:
-            - 'Build Application'
-            - 'Unit tests'
-            - 'Circular dependency test'
-            - 'Cloud Function tests'
-            - 'Build Storybook'
-            - 'Test Security Rules'
+            - 'Setup e2e'
           context:
             - e2e-tests
           matrix:
