@@ -59,7 +59,7 @@ aliases:
       name: Install Packages
       # Install packages
       command: |
-        yarn install --immutable --immutable-cache --mode=skip-build
+        yarn install --immutable --mode=skip-build
       environment:
         CYPRESS_INSTALL_BINARY: 0
         YARN_INSTALL_STATE_PATH: /home/circleci/.yarn/install-state.gz
