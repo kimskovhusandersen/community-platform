@@ -62,7 +62,7 @@ aliases:
         echo $CYPRESS_INSTALL_BINARY
         yarn install --immutable --mode=skip-build
       environment:
-        CYPRESS_INSTALL_BINARY: << parameters.include_cypress >>
+        CYPRESS_INSTALL_BINARY: 0
         YARN_INSTALL_STATE_PATH: /home/circleci/.yarn/install-state.gz
         YARN_CACHE_FOLDER: /home/circleci/.yarn/cache
   - &save_yarn_cache
@@ -138,6 +138,7 @@ commands:
             - run:
                 name: Install Cypress
                 command: |
+                  unset CYPRESS_INSTALL_BINARY
                   yarn dlx cypress install
             - save_cache:
                 name: Save cypress cache
@@ -524,13 +525,13 @@ workflows:
                 - production
       - setup_e2e:
           name: Setup e2e
-          # requires:
-          #   - 'Build Application'
-          #   - 'Unit tests'
-          #   - 'Circular dependency test'
-          #   - 'Cloud Function tests'
-          #   - 'Build Storybook'
-          #   - 'Test Security Rules'
+          requires:
+            - 'Build Application'
+            - 'Unit tests'
+            - 'Circular dependency test'
+            - 'Cloud Function tests'
+            - 'Test Security Rules'
+            - 'Build Storybook'
           filters:
             branches:
               ignore:
