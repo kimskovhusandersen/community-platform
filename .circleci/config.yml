@@ -135,6 +135,10 @@ commands:
           condition:
             equal: [<< parameters.include_cypress >>, "1"]
           steps:
+            - run:
+                name: Install Cypress
+                command: |
+                  cypress install
             - save_cache:
                 name: Save cypress cache
                 key: cypress-{{ checksum "yarn.lock" }}
