@@ -137,7 +137,7 @@ commands:
                 name: Install Cypress
                 command: |
                   unset CYPRESS_INSTALL_BINARY
-                  yarn dlx cypress install
+                  npx cypress install
                   which cypress
             - save_cache:
                 name: Save cypress cache
