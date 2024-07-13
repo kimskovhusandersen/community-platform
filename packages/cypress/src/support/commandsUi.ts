@@ -34,13 +34,27 @@ interface IOpeningTime {
 declare global {
   namespace Cypress {
     interface Chainable {
+      clickMenuItem(menuItem: UserMenuItem): Chainable<void>
       fillSignupForm(
         username: string,
         email: string,
         password: string,
       ): Chainable<void>
+      fillIntroTitle(intro: string)
 
       saveSettingsForm()
+      /**
+       * Trigger form validation
+       */
+      screenClick(): Chainable<void>
+      /**
+       * Selecting options from the react-select picker can be a bit fiddly
+       * so user helper method to locate select box, type input and pick tag
+       * (if exists) https://github.com/cypress-io/cypress/issues/549
+       * @param tagname This will be typed into the input box and selected from the dropdown list
+       * @param selector Specify the selector of the react-select element
+       **/
+      selectTag(tagName: string, selector?: string): Chainable<void>
       setSettingAddContactLink(link: ILink)
       setSettingAddOpeningTime(openingTime: IOpeningTime)
       setSettingBasicUserInfo(info: IInfo)
@@ -55,22 +69,6 @@ declare global {
 
       toggleUserMenuOn(): Chainable<void>
       toggleUserMenuOff(): Chainable<void>
-
-      /**
-       * Trigger form validation
-       */
-      screenClick(): Chainable<void>
-
-      clickMenuItem(menuItem: UserMenuItem): Chainable<void>
-
-      /**
-       * Selecting options from the react-select picker can be a bit fiddly
-       * so user helper method to locate select box, type input and pick tag
-       * (if exists) https://github.com/cypress-io/cypress/issues/549
-       * @param tagname This will be typed into the input box and selected from the dropdown list
-       * @param selector Specify the selector of the react-select element
-       **/
-      selectTag(tagName: string, selector?: string): Chainable<void>
     }
   }
 }
@@ -205,6 +203,11 @@ Cypress.Commands.add(
   },
 )
 
+Cypress.Commands.add('fillIntroTitle', (intro: string) => {
+  cy.log('Fill in intro title')
+  cy.get('[data-cy=intro-title]').clear().type(intro).blur({ force: true })
+})
+
 Cypress.Commands.add('signUpNewUser', (user?) => {
   cy.log('Generate new user details')
   const { username, email, password } = user || generateNewUserDetails()
@@ -244,11 +247,8 @@ Cypress.Commands.add(
   'selectTag',
   (tagName: string, selector = '[data-cy=tag-select]') => {
     cy.log('select tag', tagName)
-    cy.get(`${selector} input`)
-      .click({ force: true })
-      .type(tagName, { force: true })
-      .get(`${selector} .data-cy__menu-list`)
-      .contains(tagName)
-      .click()
+    cy.get(`${selector} input`).click({ force: true })
+    cy.get(`${selector} input`).type(tagName, { force: true })
+    cy.get(`${selector} .data-cy__menu-list`).contains(tagName).click()
   },
 )
